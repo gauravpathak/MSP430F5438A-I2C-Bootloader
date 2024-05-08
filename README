@@ -1,4 +1,4 @@
-									README FILE FOR MSP430F5510 BOOTSTRAP LOADER
+			README FILE FOR MSP430F5510 BOOTSTRAP LOADER
 									
 Steps for Using BSL firmware:
 1) Import this project in CCS
@@ -22,13 +22,14 @@ lnk_msp430f5438a_bsl.cmd ............................ Customised Linker Script F
 System_i2c.c ........................................ I2C Routines for EEPROM 24xx512 series
 System_i2c.h ........................................ Header File for I2C Routines
 
--------------------------------------------------------------------------------------------------------------------------------------------
-Note that the boot loader code is indepemdent of the application code, for the boot laoder to work the following code must be integrated 
-oin the application following is the memory map of both the boot loader(BSL) and that of application
+----------------------------------------------------------------------------------------------------------------
+Note that the boot loader code is independent of the application code, for the boot laoder to work 
+the following code must be integrated in the application.
+Following is the memory map of both the boot loader(BSL) and that of application
 BSL Start address 0x1000
 Application start address 0x8000
-------------------------------------------------------------------------------------------------------------------------------------------- 
-									DEMO APPLICATION FOR DEMONSTRATION OF FIRMWARE UPGRADE USING BSL
+----------------------------------------------------------------------------------------------------------------
+	DEMO APPLICATION FOR DEMONSTRATION OF FIRMWARE UPGRADE USING BSL
 									
 This project demonstrates the funtionality of MSP430 BSL.
 The program inside main.c reads the EEPROMs Page0 offset0 and stores it in an array named eeprom_data and verifies whether firmware 
@@ -52,15 +53,17 @@ int main(void)
 
     System_i2c_UCB0_read_16bSubAddr(0x50,0x0000,eeprom_data,128);	//Read the METADATA from EEPROM page0 offset0 and store it in my_data array
 
-/*The following lines are important in order to check new firmware availability and perform an update. Byte 0 will tell us about update
+/*
+ * The following lines are important in order to check new firmware availability and perform an update. Byte 0 will tell us about update
  * availability. If contents of byte 0 is other than 0x04 then MSP430 firmware update is not available.
  * The three lines inside IF statement along with IF condition must be included in all main firmware application
- * */
-    if(eeprom_data[0] == MSP430_FIRMWARE_AVAILABLE)						//Check if firmware update is available or not; if available then jump to BSL otherwise continue
-    {											//with execution of current program
-    	SYSBSLC &= ~(SYSBSLPE);					//Clear BSL Protect Enable Bit to unlock BSL; refer slau208
-		__disable_interrupt();    				//Disable interrupt before jumping to BSL
-		((void(*)(void))0x1000)();				//Calling Default address location of BSL
+ * 
+*/
+    if(eeprom_data[0] == MSP430_FIRMWARE_AVAILABLE)	//Check if firmware update is available or not; if available then jump to BSL otherwise continue
+    {							//with execution of current program
+    	SYSBSLC &= ~(SYSBSLPE);				//Clear BSL Protect Enable Bit to unlock BSL; refer slau208
+		__disable_interrupt();    		//Disable interrupt before jumping to BSL
+		((void(*)(void))0x1000)();		//Calling Default address location of BSL
     }
     else
     {
