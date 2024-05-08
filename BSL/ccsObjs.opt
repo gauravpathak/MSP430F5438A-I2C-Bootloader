@@ -1,0 +1,1 @@
+"./System_i2c.obj" "./BSL430_Low_Level_Init.obj" "./BSL430_Command_Interpreter.obj" "../lnk_msp430f5438a_bsl.cmd" -l"libmath.a" -l"libc.a" 
